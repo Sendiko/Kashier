@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Kashier</string>
+    <string name="title_card_text">Compose Multiplatform</string>
+    <string name="body_card_text">Lorem ipsum dolor sit amet, consectetur adispcing elit.</string>
 </resources>
