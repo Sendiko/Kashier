@@ -1,14 +1,8 @@
-package org.chevalierlab.kashier.layouts
+package org.chevalierlab.kashier.layouts.basics
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -19,26 +13,26 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun ColumnExample() {
-    Column(
+fun RowExample() {
+    Row(
         modifier = Modifier.padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxHeight()
                 .clip(RoundedCornerShape(16.dp))
                 .background(MaterialTheme.colorScheme.primary)
                 .weight(1f)
         )
         Box(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxHeight()
                 .clip(RoundedCornerShape(16.dp))
                 .background(MaterialTheme.colorScheme.secondary)
                 .weight(1f)
         )
         Box(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxHeight()
                 .clip(RoundedCornerShape(16.dp))
                 .background(MaterialTheme.colorScheme.tertiary)
                 .weight(1f)
@@ -48,8 +42,8 @@ fun ColumnExample() {
 
 @Preview
 @Composable
-fun ColumnExamplePreview() {
+fun RowExamplePreview() {
     Surface {
-        ColumnExample()
+        RowExample()
     }
 }

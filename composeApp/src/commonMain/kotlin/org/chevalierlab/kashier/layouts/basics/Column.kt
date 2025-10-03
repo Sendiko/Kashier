@@ -1,9 +1,11 @@
-package org.chevalierlab.kashier.layouts
+package org.chevalierlab.kashier.layouts.basics
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -15,41 +17,37 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun BoxExample() {
-    Box(
-        modifier = Modifier.fillMaxSize()
+fun ColumnExample() {
+    Column(
+        modifier = Modifier.padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(
-            modifier = Modifier.size(256.dp)
+            modifier = Modifier.fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
                 .background(MaterialTheme.colorScheme.primary)
-                .align(Alignment.TopCenter)
+                .weight(1f)
         )
         Box(
-            modifier = Modifier.size(156.dp)
+            modifier = Modifier.fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
                 .background(MaterialTheme.colorScheme.secondary)
-                .align(Alignment.TopEnd)
+                .weight(1f)
         )
         Box(
-            modifier = Modifier.size(56.dp)
+            modifier = Modifier.fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
                 .background(MaterialTheme.colorScheme.tertiary)
-                .align(Alignment.Center)
-        )
-        Box(
-            modifier = Modifier.size(128.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .background(MaterialTheme.colorScheme.inversePrimary)
-                .align(Alignment.BottomCenter)
+                .weight(1f)
         )
     }
 }
 
 @Preview
 @Composable
-fun BoxExamplePreview() {
+fun ColumnExamplePreview() {
     Surface {
-        BoxExample()
+        ColumnExample()
     }
 }
