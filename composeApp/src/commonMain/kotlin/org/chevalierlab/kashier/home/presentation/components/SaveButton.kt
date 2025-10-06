@@ -17,11 +17,13 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun SaveButton(
     modifier: Modifier = Modifier,
-    onSave: () -> Unit
+    onSave: () -> Unit,
+    enabled: Boolean = true,
 ) {
     Button(
         modifier = modifier,
         onClick = onSave,
+        enabled = enabled,
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.primary,
