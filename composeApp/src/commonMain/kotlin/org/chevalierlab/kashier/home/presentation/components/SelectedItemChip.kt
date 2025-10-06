@@ -3,6 +3,7 @@ package org.chevalierlab.kashier.home.presentation.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -11,13 +12,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import org.chevalierlab.kashier.home.data.DummyDataSource
+import org.chevalierlab.kashier.home.domain.Item
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun SelectedItemChip(
     modifier: Modifier = Modifier,
     onRemove: () -> Unit,
-    text: String
+    item: Item
 ) {
     Card(
         modifier = modifier,
@@ -28,17 +31,18 @@ fun SelectedItemChip(
         )
     ) {
         Row(
-            modifier = Modifier.padding(start = 16.dp, end = 4.dp, top = 2.dp, bottom = 2.dp),
+            modifier = Modifier.padding(start = 16.dp, end = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
         ) {
-            Text(text = text, style = MaterialTheme.typography.bodyLarge)
+            Text(text = item.name, style = MaterialTheme.typography.bodyMedium)
             IconButton(
                 onClick = { onRemove() },
                 content = {
                     Icon(
+                        modifier = Modifier.size(24.dp),
                         imageVector = Icons.Default.Close,
-                        contentDescription = text
+                        contentDescription = item.name
                     )
                 }
             )
@@ -52,7 +56,7 @@ fun SelectedItemChipPreview() {
     Surface {
         SelectedItemChip(
             onRemove = { },
-            text = "Jeruk Mandarin 1 KG",
+            item = DummyDataSource().getDatas().first(),
             modifier = Modifier.padding(16.dp)
         )
     }
