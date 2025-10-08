@@ -1,10 +1,12 @@
 package org.chevalierlab.kashier.home.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
@@ -43,31 +45,40 @@ fun ItemCard(
         shape = RoundedCornerShape(8.dp)
     ) {
         Row(
-            modifier = Modifier.padding(start = 16.dp, end = 8.dp),
+            modifier = Modifier.padding(start = 16.dp, end = 8.dp, top = 8.dp, bottom = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(text = item.name)
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                modifier = Modifier.weight(1f),
-                text = item.price.toString(),
-                fontWeight = FontWeight.Bold
-            )
-            IconButton(
-                onClick = { onEdit(item) },
+            Column(
+                modifier = Modifier.weight(3f)
             ) {
-                Icon(
-                    imageVector = Icons.Rounded.Edit,
-                    contentDescription = stringResource(Res.string.edit_item),
+                Text(text = item.name)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = item.price.toString(),
+                    fontWeight = FontWeight.Bold
                 )
             }
-            IconButton(
-                onClick = { onAdd(item) },
+            Row(
+                modifier = Modifier.weight(1f)
             ) {
-                Icon(
-                    imageVector = Icons.Rounded.Add,
-                    contentDescription = stringResource(Res.string.add_item),
-                )
+                IconButton(
+                    onClick = { onEdit(item) },
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.Edit,
+                        contentDescription = stringResource(Res.string.edit_item),
+                    )
+                }
+                IconButton(
+                    onClick = { onAdd(item) },
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.Add,
+                        contentDescription = stringResource(Res.string.add_item),
+                    )
+                }
+
+
             }
         }
     }
