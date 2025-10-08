@@ -9,4 +9,5 @@
     <string name="selected_item_label">Barang terpilih</string>
     <string name="all_item_label">Semua barang</string>
     <string name="add_item_fab_label">Buat Barang</string>
+    <string name="empty_item">Tidak ada barang.</string>
 </resources>
