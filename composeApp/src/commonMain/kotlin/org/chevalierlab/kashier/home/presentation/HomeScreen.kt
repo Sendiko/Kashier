@@ -3,6 +3,7 @@ package org.chevalierlab.kashier.home.presentation
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,6 +13,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kashier.composeapp.generated.resources.*
 import org.chevalierlab.kashier.home.data.DummyDataSource
@@ -22,13 +24,10 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
-
-    var totalPrice by remember { mutableStateOf(0.00) }
-    val selectedItems = remember { mutableStateListOf<Item>() }
-    var showSelectedItem by remember { mutableStateOf(true) }
-    var showAllItem by remember { mutableStateOf(true) }
-
+fun HomeScreen(
+    state: HomeState,
+    onEvent: (HomeEvent) -> Unit
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -47,12 +46,12 @@ fun HomeScreen() {
         }
     ) { paddingValues ->
         LazyColumn(
-            contentPadding = paddingValues,
+            contentPadding = PaddingValues(top = paddingValues.calculateTopPadding(), bottom = 76.dp),
         ) {
             item {
                 TotalPriceHeader(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    totalPrice = totalPrice
+                    totalPrice = state.totalPrice
                 )
             }
             item {
@@ -61,57 +60,81 @@ fun HomeScreen() {
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                     onSave = { TODO("Save data.") },
-                    enabled = selectedItems.isNotEmpty() && totalPrice > 0.00
+                    enabled = state.selectedItems.isNotEmpty() && state.totalPrice > 0.00
                 )
             }
             item {
                 HomeSeparator(
                     modifier = Modifier.padding(start = 16.dp, end = 4.dp),
                     title = stringResource(Res.string.selected_item_label),
-                    visible = showSelectedItem,
+                    visible = state.selectedItemVisible,
                     onAction = { visible ->
-                        showSelectedItem = visible
+                        onEvent(HomeEvent.OnSelectedItemVisibilityChange(visible))
                     }
                 )
             }
             item {
-                AnimatedVisibility(
-                    visible = showSelectedItem,
-                    enter = expandVertically(),
-                    exit = shrinkVertically()
-                ) {
-                    FlowRow(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        verticalArrangement = Arrangement.spacedBy(4.dp),
-                        horizontalArrangement = Arrangement.spacedBy(4.dp),
-                        content = {
-                            selectedItems.map { item ->
-                                SelectedItemChip(
-                                    onRemove = {
-                                        selectedItems.remove(item)
-                                        totalPrice -= item.price
-                                    },
-                                    item = item,
-                                    modifier = Modifier.padding(horizontal = 4.dp)
-                                )
-                            }
+                AnimatedContent(
+                    targetState = state.selectedItems.isEmpty(),
+                    transitionSpec = {
+                        fadeIn() togetherWith fadeOut()
+                    }
+                ) { empty ->
+                    if (!empty) {
+                        AnimatedVisibility(
+                            visible = state.selectedItemVisible,
+                            enter = fadeIn(),
+                            exit = fadeOut()
+                        ) {
+                            FlowRow(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                verticalArrangement = Arrangement.spacedBy(4.dp),
+                                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                                content = {
+                                    state.selectedItems.map { item ->
+                                        SelectedItemChip(
+                                            onRemove = {
+                                                onEvent(HomeEvent.OnRemoveItem(item))
+                                            },
+                                            item = item,
+                                            modifier = Modifier.padding(horizontal = 4.dp)
+                                        )
+                                    }
+                                }
+                            )
                         }
-                    )
+                    } else {
+                        Text(
+                            modifier = Modifier.padding(16.dp)
+                                .fillMaxWidth(),
+                            text = stringResource(Res.string.empty_item),
+                            style = MaterialTheme.typography.headlineSmall,
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
             }
             item {
                 HomeSeparator(
                     modifier = Modifier.padding(start = 16.dp, end = 4.dp),
                     title = stringResource(Res.string.all_item_label),
-                    visible = showAllItem,
+                    visible = state.allItemsVisible,
                     onAction = { visible ->
-                        showAllItem = visible
+                        onEvent(HomeEvent.OnAllItemVisibilityChange(visible))
                     }
                 )
             }
-            items(DummyDataSource().getDatas()) { item ->
+            item {
+                Searchbar(
+                    modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
+                    value = state.searchQuery,
+                    onValueChange = { onEvent(HomeEvent.OnSearchQueryChange(it)) },
+                    onSearch = { onEvent(HomeEvent.OnSearchQuerySubmit) }
+                )
+            }
+            items(state.items) { item ->
                 AnimatedVisibility(
-                    visible = showAllItem,
+                    visible = state.allItemsVisible,
                     enter = fadeIn(),
                     exit = fadeOut()
                 ) {
@@ -120,8 +143,7 @@ fun HomeScreen() {
                         item = item,
                         onEdit = { },
                         onAdd = {
-                            selectedItems.add(it)
-                            totalPrice += it.price
+                            onEvent(HomeEvent.OnAddItem(item))
                         }
                     )
                 }
@@ -133,5 +155,8 @@ fun HomeScreen() {
 @Preview
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen()
+    HomeScreen(
+        state = HomeState(),
+        onEvent = { }
+    )
 }
