@@ -1,17 +1,13 @@
 package org.chevalierlab.kashier.home.presentation
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import org.chevalierlab.kashier.home.data.DummyDataSource
 import org.chevalierlab.kashier.home.domain.Item
 
-class HomeViewModel: ViewModel() {
+class HomeViewModel : ViewModel() {
 
     private val _items = DummyDataSource().getDatas()
     private val _state = MutableStateFlow(HomeState(items = _items))
@@ -61,11 +57,13 @@ class HomeViewModel: ViewModel() {
 
     private fun search() {
         if (state.value.searchQuery.isNotBlank()) {
-            _state.update { it.copy(
-                items = _state.value.items.filter { item ->
-                    item.name.contains(_state.value.searchQuery, ignoreCase = true)
-                }
-            ) }
+            _state.update {
+                it.copy(
+                    items = _state.value.items.filter { item ->
+                        item.name.contains(_state.value.searchQuery, ignoreCase = true)
+                    }
+                )
+            }
         } else {
             _state.update { it.copy(items = _items) }
         }
