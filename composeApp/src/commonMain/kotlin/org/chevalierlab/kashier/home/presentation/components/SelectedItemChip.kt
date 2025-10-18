@@ -12,8 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.chevalierlab.kashier.home.data.DummyDataSource
-import org.chevalierlab.kashier.home.domain.Item
+import org.chevalierlab.kashier.home.domain.models.Item
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable

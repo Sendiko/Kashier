@@ -15,7 +15,7 @@ import kashier.composeapp.generated.resources.Res
 import kashier.composeapp.generated.resources.add_item
 import kashier.composeapp.generated.resources.edit_item
 import org.chevalierlab.kashier.core.utils.formatCurrency
-import org.chevalierlab.kashier.home.domain.Item
+import org.chevalierlab.kashier.home.domain.models.Item
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
