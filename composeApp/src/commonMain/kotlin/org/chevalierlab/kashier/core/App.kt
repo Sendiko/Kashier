@@ -15,6 +15,7 @@ import org.chevalierlab.kashier.history.presentation.HistoryViewModel
 import org.chevalierlab.kashier.home.presentation.HomeScreen
 import org.chevalierlab.kashier.home.presentation.HomeViewModel
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 @Preview
@@ -26,7 +27,7 @@ fun App() {
             startDestination = HomeDestination
         ) {
             composable<HomeDestination> {
-                val viewModel = viewModel<HomeViewModel>()
+                val viewModel = koinViewModel<HomeViewModel>()
                 val state by viewModel.state.collectAsStateWithLifecycle()
                 HomeScreen(
                     state = state,
