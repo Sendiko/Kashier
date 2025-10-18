@@ -77,14 +77,20 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
                 )
             }
         } else {
-            _state.update { it.copy(items = it.items) }
+            viewModelScope.launch {
+                val data = repository.getItems()
+                _state.update { it.copy(items = data) }
+            }
         }
     }
 
     private fun updateQuery(query: String) {
         _state.update { it.copy(searchQuery = query) }
         if (state.value.searchQuery.isBlank()) {
-            _state.update { it.copy(items = it.items) }
+            viewModelScope.launch {
+                val data = repository.getItems()
+                _state.update { it.copy(items = data) }
+            }
         }
     }
 
