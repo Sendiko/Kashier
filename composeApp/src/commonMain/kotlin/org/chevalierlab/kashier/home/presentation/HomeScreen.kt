@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -26,6 +27,13 @@ fun HomeScreen(
     onEvent: (HomeEvent) -> Unit,
     onNavigate: (Any) -> Unit,
 ) {
+
+    LaunchedEffect(state.items) {
+        if (state.items.isEmpty()) {
+            onEvent(HomeEvent.OnLoadData)
+        }
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(

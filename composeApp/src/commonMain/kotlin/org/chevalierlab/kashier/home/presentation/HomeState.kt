@@ -1,6 +1,6 @@
 package org.chevalierlab.kashier.home.presentation
 
-import org.chevalierlab.kashier.home.domain.Item
+import org.chevalierlab.kashier.home.domain.models.Item
 
 data class HomeState(
     val searchQuery: String = "",

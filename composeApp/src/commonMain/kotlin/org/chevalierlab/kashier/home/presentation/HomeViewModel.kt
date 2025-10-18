@@ -1,16 +1,19 @@
 package org.chevalierlab.kashier.home.presentation
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import org.chevalierlab.kashier.home.data.DummyDataSource
-import org.chevalierlab.kashier.home.domain.Item
+import kotlinx.coroutines.launch
+import org.chevalierlab.kashier.home.data.datasource.DummyDataSource
+import org.chevalierlab.kashier.home.domain.models.Item
+import org.chevalierlab.kashier.home.domain.repository.HomeRepository
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
 
-    private val _items = DummyDataSource().getDatas()
-    private val _state = MutableStateFlow(HomeState(items = _items))
+    private val _state = MutableStateFlow(HomeState())
     val state = _state.asStateFlow()
 
     fun onEvent(event: HomeEvent) {
@@ -22,6 +25,15 @@ class HomeViewModel : ViewModel() {
             is HomeEvent.OnSearchQueryChange -> updateQuery(event.query)
             HomeEvent.OnSearchQuerySubmit -> search()
             HomeEvent.OnSaveTransaction -> saveTransaction()
+            HomeEvent.OnLoadData -> loadData()
+        }
+    }
+
+    private fun loadData() {
+        viewModelScope.launch {
+            delay(2000) /* Simulate Network Call */
+            val data = repository.getItems()
+            _state.update { it.copy(items = data) }
         }
     }
 
@@ -65,14 +77,14 @@ class HomeViewModel : ViewModel() {
                 )
             }
         } else {
-            _state.update { it.copy(items = _items) }
+            _state.update { it.copy(items = it.items) }
         }
     }
 
     private fun updateQuery(query: String) {
         _state.update { it.copy(searchQuery = query) }
         if (state.value.searchQuery.isBlank()) {
-            _state.update { it.copy(items = _items) }
+            _state.update { it.copy(items = it.items) }
         }
     }
 
