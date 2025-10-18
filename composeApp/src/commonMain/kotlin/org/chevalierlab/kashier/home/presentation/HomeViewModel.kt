@@ -15,7 +15,7 @@ class HomeViewModel: ViewModel() {
 
     private val _items = DummyDataSource().getDatas()
     private val _state = MutableStateFlow(HomeState(items = _items))
-    val state = _state
+    val state = _state.asStateFlow()
 
     fun onEvent(event: HomeEvent) {
         when (event) {

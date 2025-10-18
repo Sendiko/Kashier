@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import kashier.composeapp.generated.resources.Res
 import kashier.composeapp.generated.resources.add_item
 import kashier.composeapp.generated.resources.edit_item
+import org.chevalierlab.kashier.core.utils.formatCurrency
 import org.chevalierlab.kashier.home.domain.Item
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -54,7 +55,7 @@ fun ItemCard(
                 Text(text = item.name)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = item.price.toString(),
+                    text = formatCurrency(item.price),
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -94,7 +95,7 @@ fun ItemCardPreview() {
             name = "Lorem ipsum",
             price = 100000.0
         ),
-        onEdit = {  },
-        onAdd = {  }
+        onEdit = { },
+        onAdd = { }
     )
 }
