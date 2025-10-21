@@ -12,4 +12,6 @@
     <string name="empty_item">Tidak ada barang.</string>
     <string name="history_topbar">Riwayat Transaksi</string>
     <string name="navigate_back">Kembali</string>
+    <string name="user_created">User successfully created: </string>
+    <string name="dismiss">Dismiss</string>
 </resources>
