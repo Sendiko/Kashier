@@ -1,5 +1,6 @@
 package org.chevalierlab.kashier.home.domain.repository
 
+import kotlinx.coroutines.flow.Flow
 import org.chevalierlab.kashier.home.domain.models.Item
 
 interface HomeRepository {
@@ -13,5 +14,9 @@ interface HomeRepository {
     suspend fun putItem(item: Item): Result<Boolean>
 
     suspend fun postTransaction(): Result<Boolean>
+
+    suspend fun createUser()
+
+    fun getUser(): Flow<String>
 
 }
