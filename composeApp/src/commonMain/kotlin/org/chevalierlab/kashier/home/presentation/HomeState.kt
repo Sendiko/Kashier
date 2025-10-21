@@ -9,4 +9,5 @@ data class HomeState(
     val items: List<Item> = emptyList(),
     val selectedItems: List<Item> = emptyList(),
     val totalPrice: Double = 0.0,
+    val userName: String = ""
 )

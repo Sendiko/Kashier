@@ -10,13 +10,18 @@ import androidx.compose.material.icons.filled.History
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kashier.composeapp.generated.resources.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.chevalierlab.kashier.core.navigation.HistoryDestination
 import org.chevalierlab.kashier.home.presentation.components.*
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -27,6 +32,8 @@ fun HomeScreen(
     onEvent: (HomeEvent) -> Unit,
     onNavigate: (Any) -> Unit,
 ) {
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(state.items) {
         if (state.items.isEmpty()) {
@@ -34,7 +41,22 @@ fun HomeScreen(
         }
     }
 
+    LaunchedEffect(state.userName) {
+        delay(500)
+        if (state.userName.isBlank()) {
+            onEvent(HomeEvent.CreateUserName)
+        } else {
+            scope.launch {
+                snackbarHostState.showSnackbar(
+                    message = getString(Res.string.user_created) + state.userName,
+                    withDismissAction = true
+                )
+            }
+        }
+    }
+
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
                 title = {
