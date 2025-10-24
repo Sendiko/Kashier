@@ -40,9 +40,24 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
 
     private fun loadData() {
         viewModelScope.launch {
-            delay(2000) /* Simulate Network Call */
-            val data = repository.getItems()
-            _state.update { it.copy(items = data) }
+            _state.update { it.copy(isLoading = true) }
+            repository.getItems(userId = state.value.userName)
+                .onSuccess { result ->
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            items = result
+                        )
+                    }
+                }
+                .onFailure { error ->
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            errorMessage = error.message
+                        )
+                    }
+                }
         }
     }
 

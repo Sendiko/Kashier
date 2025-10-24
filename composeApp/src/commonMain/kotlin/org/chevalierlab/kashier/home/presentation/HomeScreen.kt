@@ -1,6 +1,7 @@
 package org.chevalierlab.kashier.home.presentation
 
 import androidx.compose.animation.*
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kashier.composeapp.generated.resources.*
@@ -55,136 +57,151 @@ fun HomeScreen(
         }
     }
 
-    Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) },
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(text = stringResource(Res.string.app_name))
-                },
-                actions = {
-                    IconButton(
-                        onClick = { onNavigate(HistoryDestination) }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.History,
-                            contentDescription = stringResource(Res.string.history_topbar)
-                        )
-                    }
-                }
-            )
-        },
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                onClick = { TODO("Add Item.") },
-                containerColor = MaterialTheme.colorScheme.tertiary,
-                text = { Text(text = stringResource(Res.string.add_item_fab_label)) },
-                icon = { Icon(Icons.Filled.Add, contentDescription = stringResource(Res.string.add_item_fab_label)) }
-            )
-        }
-    ) { paddingValues ->
-        LazyColumn(
-            contentPadding = PaddingValues(top = paddingValues.calculateTopPadding(), bottom = 76.dp),
+    Box {
+        AnimatedVisibility(
+            visible = state.isLoading,
+            enter = fadeIn(),
+            exit = fadeOut()
         ) {
-            item {
-                TotalPriceHeader(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    totalPrice = state.totalPrice
-                )
+            Box(
+                modifier = Modifier.fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.5f)),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
-            item {
-                SaveButton(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    onSave = { TODO("Save data.") },
-                    enabled = state.selectedItems.isNotEmpty() && state.totalPrice > 0.00
-                )
-            }
-            item {
-                HomeSeparator(
-                    modifier = Modifier.padding(start = 16.dp, end = 4.dp),
-                    title = stringResource(Res.string.selected_item_label),
-                    visible = state.selectedItemVisible,
-                    onAction = { visible ->
-                        onEvent(HomeEvent.OnSelectedItemVisibilityChange(visible))
-                    }
-                )
-            }
-            item {
-                AnimatedContent(
-                    targetState = state.selectedItems.isEmpty(),
-                    transitionSpec = {
-                        fadeIn() togetherWith fadeOut()
-                    }
-                ) { empty ->
-                    if (!empty) {
-                        AnimatedVisibility(
-                            visible = state.selectedItemVisible,
-                            enter = fadeIn(),
-                            exit = fadeOut()
+        }
+        Scaffold(
+            snackbarHost = { SnackbarHost(snackbarHostState) },
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(text = stringResource(Res.string.app_name))
+                    },
+                    actions = {
+                        IconButton(
+                            onClick = { onNavigate(HistoryDestination) }
                         ) {
-                            FlowRow(
-                                modifier = Modifier.padding(horizontal = 16.dp),
-                                verticalArrangement = Arrangement.spacedBy(4.dp),
-                                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                                itemVerticalAlignment = Alignment.Top,
-                                content = {
-                                    state.selectedItems.map { item ->
-                                        SelectedItemChip(
-                                            onRemove = {
-                                                onEvent(HomeEvent.OnRemoveItem(item))
-                                            },
-                                            item = item,
-                                            modifier = Modifier.padding(horizontal = 4.dp)
-                                        )
-                                    }
-                                }
+                            Icon(
+                                imageVector = Icons.Filled.History,
+                                contentDescription = stringResource(Res.string.history_topbar)
                             )
                         }
-                    } else {
-                        Text(
-                            modifier = Modifier.padding(16.dp)
-                                .fillMaxWidth(),
-                            text = stringResource(Res.string.empty_item),
-                            style = MaterialTheme.typography.headlineSmall,
-                            textAlign = TextAlign.Center
-                        )
                     }
+                )
+            },
+            floatingActionButton = {
+                ExtendedFloatingActionButton(
+                    onClick = { TODO("Add Item.") },
+                    containerColor = MaterialTheme.colorScheme.tertiary,
+                    text = { Text(text = stringResource(Res.string.add_item_fab_label)) },
+                    icon = { Icon(Icons.Filled.Add, contentDescription = stringResource(Res.string.add_item_fab_label)) }
+                )
+            }
+        ) { paddingValues ->
+            LazyColumn(
+                contentPadding = PaddingValues(top = paddingValues.calculateTopPadding(), bottom = 76.dp),
+            ) {
+                item {
+                    TotalPriceHeader(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        totalPrice = state.totalPrice
+                    )
                 }
-            }
-            item {
-                HomeSeparator(
-                    modifier = Modifier.padding(start = 16.dp, end = 4.dp),
-                    title = stringResource(Res.string.all_item_label),
-                    visible = state.allItemsVisible,
-                    onAction = { visible ->
-                        onEvent(HomeEvent.OnAllItemVisibilityChange(visible))
-                    }
-                )
-            }
-            item {
-                Searchbar(
-                    modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
-                    value = state.searchQuery,
-                    onValueChange = { onEvent(HomeEvent.OnSearchQueryChange(it)) },
-                    onSearch = { onEvent(HomeEvent.OnSearchQuerySubmit) }
-                )
-            }
-            items(state.items) { item ->
-                AnimatedVisibility(
-                    visible = state.allItemsVisible,
-                    enter = fadeIn(),
-                    exit = fadeOut()
-                ) {
-                    ItemCard(
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
-                        item = item,
-                        onEdit = { },
-                        onAdd = {
-                            onEvent(HomeEvent.OnAddItem(item))
+                item {
+                    SaveButton(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        onSave = { TODO("Save data.") },
+                        enabled = state.selectedItems.isNotEmpty() && state.totalPrice > 0.00
+                    )
+                }
+                item {
+                    HomeSeparator(
+                        modifier = Modifier.padding(start = 16.dp, end = 4.dp),
+                        title = stringResource(Res.string.selected_item_label),
+                        visible = state.selectedItemVisible,
+                        onAction = { visible ->
+                            onEvent(HomeEvent.OnSelectedItemVisibilityChange(visible))
                         }
                     )
+                }
+                item {
+                    AnimatedContent(
+                        targetState = state.selectedItems.isEmpty(),
+                        transitionSpec = {
+                            fadeIn() togetherWith fadeOut()
+                        }
+                    ) { empty ->
+                        if (!empty) {
+                            AnimatedVisibility(
+                                visible = state.selectedItemVisible,
+                                enter = fadeIn(),
+                                exit = fadeOut()
+                            ) {
+                                FlowRow(
+                                    modifier = Modifier.padding(horizontal = 16.dp),
+                                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                                    itemVerticalAlignment = Alignment.Top,
+                                    content = {
+                                        state.selectedItems.map { item ->
+                                            SelectedItemChip(
+                                                onRemove = {
+                                                    onEvent(HomeEvent.OnRemoveItem(item))
+                                                },
+                                                item = item,
+                                                modifier = Modifier.padding(horizontal = 4.dp)
+                                            )
+                                        }
+                                    }
+                                )
+                            }
+                        } else {
+                            Text(
+                                modifier = Modifier.padding(16.dp)
+                                    .fillMaxWidth(),
+                                text = stringResource(Res.string.empty_item),
+                                style = MaterialTheme.typography.headlineSmall,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                }
+                item {
+                    HomeSeparator(
+                        modifier = Modifier.padding(start = 16.dp, end = 4.dp),
+                        title = stringResource(Res.string.all_item_label),
+                        visible = state.allItemsVisible,
+                        onAction = { visible ->
+                            onEvent(HomeEvent.OnAllItemVisibilityChange(visible))
+                        }
+                    )
+                }
+                item {
+                    Searchbar(
+                        modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(),
+                        value = state.searchQuery,
+                        onValueChange = { onEvent(HomeEvent.OnSearchQueryChange(it)) },
+                        onSearch = { onEvent(HomeEvent.OnSearchQuerySubmit) }
+                    )
+                }
+                items(state.items) { item ->
+                    AnimatedVisibility(
+                        visible = state.allItemsVisible,
+                        enter = fadeIn(),
+                        exit = fadeOut()
+                    ) {
+                        ItemCard(
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                            item = item,
+                            onEdit = { },
+                            onAdd = {
+                                onEvent(HomeEvent.OnAddItem(item))
+                            }
+                        )
+                    }
                 }
             }
         }
