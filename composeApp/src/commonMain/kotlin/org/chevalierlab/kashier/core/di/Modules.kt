@@ -4,6 +4,8 @@ import org.chevalierlab.kashier.core.preferences.AppPreferences
 import org.chevalierlab.kashier.home.data.HomeRepositoryImpl
 import org.chevalierlab.kashier.home.data.datasource.DummyDataSource
 import org.chevalierlab.kashier.home.data.datasource.DummyDataSourceImpl
+import org.chevalierlab.kashier.home.data.datasource.ItemRemoteDataSource
+import org.chevalierlab.kashier.home.data.datasource.ItemRemoteDataSourceImpl
 import org.chevalierlab.kashier.home.data.datasource.UserLocalDataSource
 import org.chevalierlab.kashier.home.data.datasource.UserLocalDataSourceImpl
 import org.chevalierlab.kashier.home.domain.repository.HomeRepository
@@ -21,6 +23,7 @@ val sharedModules = module {
 
     singleOf(::DummyDataSourceImpl).bind<DummyDataSource>()
     singleOf(::UserLocalDataSourceImpl).bind<UserLocalDataSource>()
+    singleOf(::ItemRemoteDataSourceImpl).bind<ItemRemoteDataSource>()
     singleOf(::HomeRepositoryImpl).bind<HomeRepository>()
 
     factory { AppPreferences(get()) }

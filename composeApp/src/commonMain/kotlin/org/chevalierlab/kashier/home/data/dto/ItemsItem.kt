@@ -2,6 +2,7 @@ package org.chevalierlab.kashier.home.data.dto
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
+import org.chevalierlab.kashier.home.domain.models.Item
 
 @Serializable
 data class ItemsItem(
@@ -23,4 +24,13 @@ data class ItemsItem(
 
 	@SerialName("updatedAt")
 	val updatedAt: String
-)
+) {
+    fun toDomain(): Item {
+        return Item(
+            id = id,
+            userId = userId,
+            name = name,
+            price = price.toDouble()
+        )
+    }
+}

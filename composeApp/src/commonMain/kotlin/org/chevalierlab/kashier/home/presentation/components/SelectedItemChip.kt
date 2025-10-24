@@ -55,7 +55,7 @@ fun SelectedItemChipPreview() {
     Surface {
         SelectedItemChip(
             onRemove = { },
-            item = Item(id = 1, userId = 101, name = "Pisang Cavendish (Cavendish Banana)", price = 25000.0),
+            item = Item(id = 1, userId = "101", name = "Pisang Cavendish (Cavendish Banana)", price = 25000.0),
             modifier = Modifier.padding(16.dp)
         )
     }

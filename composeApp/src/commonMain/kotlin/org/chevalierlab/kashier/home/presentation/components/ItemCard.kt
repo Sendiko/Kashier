@@ -80,7 +80,7 @@ fun ItemCardPreview() {
     ItemCard(
         item = Item(
             id = 1,
-            userId = 1,
+            userId = "1",
             name = "Lorem ipsum",
             price = 100000.0
         ),
