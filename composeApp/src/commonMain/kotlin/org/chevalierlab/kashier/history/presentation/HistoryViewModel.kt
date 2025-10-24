@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.datetime.*
-import org.chevalierlab.kashier.history.data.DummyHistoryDataSource
+import org.chevalierlab.kashier.history.data.datasource.DummyHistoryDataSource
 import org.chevalierlab.kashier.history.domain.History
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
