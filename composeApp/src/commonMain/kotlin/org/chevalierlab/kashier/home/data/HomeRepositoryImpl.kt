@@ -2,6 +2,7 @@ package org.chevalierlab.kashier.home.data
 
 import kotlinx.coroutines.flow.Flow
 import org.chevalierlab.kashier.home.data.datasource.DummyDataSource
+import org.chevalierlab.kashier.home.data.datasource.ItemRemoteDataSource
 import org.chevalierlab.kashier.home.data.datasource.UserLocalDataSource
 import org.chevalierlab.kashier.home.data.datasource.getDeviceName
 import org.chevalierlab.kashier.home.domain.models.Item
@@ -9,11 +10,23 @@ import org.chevalierlab.kashier.home.domain.repository.HomeRepository
 
 class HomeRepositoryImpl(
     private val dataSource: DummyDataSource,
+    private val remoteDataSource: ItemRemoteDataSource,
     private val userLocalDataSource: UserLocalDataSource
 ) : HomeRepository {
 
-    override suspend fun getItems(): List<Item> {
-        return dataSource.getDatas()
+    override suspend fun getItems(userId: String): Result<List<Item>> {
+        val result = remoteDataSource.getItems(userId)
+
+        return if (result.isSuccess) {
+            try {
+                val itemsResponse = result.getOrThrow()
+                Result.success(itemsResponse.items.map { it.toDomain() })
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        } else {
+            Result.failure(result.exceptionOrNull() ?: Exception("Unknown remote error."))
+        }
     }
 
     override suspend fun postItem(item: Item): Result<Boolean> {

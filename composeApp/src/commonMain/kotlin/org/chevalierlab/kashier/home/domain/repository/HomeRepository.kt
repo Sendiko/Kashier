@@ -5,7 +5,7 @@ import org.chevalierlab.kashier.home.domain.models.Item
 
 interface HomeRepository {
 
-    suspend fun getItems(): List<Item>
+    suspend fun getItems(userId: String): Result<List<Item>>
 
     suspend fun postItem(item: Item): Result<Boolean>
 
