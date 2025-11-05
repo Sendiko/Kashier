@@ -71,7 +71,16 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
     }
 
     private fun saveTransaction() {
-        TODO("Save Data to API.")
+        viewModelScope.launch {
+            repository.postTransaction(
+                total = state.value.totalPrice.toInt(),
+                userId = state.value.userName,
+                items = state.value.selectedItems.count()
+            )
+                .onSuccess {
+
+                }
+        }
     }
 
     private fun addItem(item: Item) {
