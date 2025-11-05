@@ -13,7 +13,7 @@ interface HomeRepository {
 
     suspend fun putItem(item: Item): Result<Boolean>
 
-    suspend fun postTransaction(): Result<Boolean>
+    suspend fun postTransaction(total: Int, userId: String, items: Int): Result<Boolean>
 
     suspend fun createUser()
 
