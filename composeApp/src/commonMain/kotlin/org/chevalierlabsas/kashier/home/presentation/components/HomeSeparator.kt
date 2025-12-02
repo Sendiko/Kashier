@@ -1,4 +1,4 @@
-package org.chevalierlab.kashier.home.presentation.components
+package org.chevalierlabsas.kashier.home.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

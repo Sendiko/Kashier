@@ -1,4 +1,4 @@
-package org.chevalierlab.kashier.home.presentation
+package org.chevalierlabsas.kashier.home.presentation
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.Arrangement
@@ -14,9 +14,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kashier.composeapp.generated.resources.*
-import org.chevalierlab.kashier.home.data.DummyDataSource
-import org.chevalierlab.kashier.home.domain.Item
-import org.chevalierlab.kashier.home.presentation.components.*
+import org.chevalierlabsas.kashier.home.data.DummyDataSource
+import org.chevalierlabsas.kashier.home.domain.Item
+import org.chevalierlabsas.kashier.home.presentation.components.*
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 

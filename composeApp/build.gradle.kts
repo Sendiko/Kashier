@@ -55,11 +55,11 @@ kotlin {
 }
 
 android {
-    namespace = "org.chevalierlab.kashier"
+    namespace = "org.chevalierlabsas.kashier"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "org.chevalierlab.kashier"
+        applicationId = "org.chevalierlabsas.kashier"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1

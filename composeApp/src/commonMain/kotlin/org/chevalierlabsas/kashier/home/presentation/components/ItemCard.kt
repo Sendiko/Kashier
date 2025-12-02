@@ -1,6 +1,5 @@
-package org.chevalierlab.kashier.home.presentation.components
+package org.chevalierlabsas.kashier.home.presentation.components
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -23,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import kashier.composeapp.generated.resources.Res
 import kashier.composeapp.generated.resources.add_item
 import kashier.composeapp.generated.resources.edit_item
-import org.chevalierlab.kashier.home.domain.Item
+import org.chevalierlabsas.kashier.home.domain.Item
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 

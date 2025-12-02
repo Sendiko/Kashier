@@ -1,4 +1,4 @@
-package org.chevalierlab.kashier.home.presentation.components
+package org.chevalierlabsas.kashier.home.presentation.components
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kashier.composeapp.generated.resources.Res
 import kashier.composeapp.generated.resources.save_button_label
-import kashier.composeapp.generated.resources.searchbar_hint
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 

@@ -1,7 +1,6 @@
-package org.chevalierlab.kashier.home.data
+package org.chevalierlabsas.kashier.home.data
 
-import org.chevalierlab.kashier.home.domain.Item
-import org.chevalierlab.kashier.home.presentation.components.ItemCard
+import org.chevalierlabsas.kashier.home.domain.Item
 
 class DummyDataSource {
 

@@ -1,6 +1,6 @@
-package org.chevalierlab.kashier
+package org.chevalierlabsas.kashier
 
 import androidx.compose.ui.window.ComposeUIViewController
-import org.chevalierlab.kashier.core.App
+import org.chevalierlabsas.kashier.core.App
 
 fun MainViewController() = ComposeUIViewController { App() }

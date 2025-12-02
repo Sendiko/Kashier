@@ -1,4 +1,4 @@
-package org.chevalierlab.kashier.home.presentation.components
+package org.chevalierlabsas.kashier.home.presentation.components
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
