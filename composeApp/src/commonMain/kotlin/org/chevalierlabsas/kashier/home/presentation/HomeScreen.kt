@@ -109,7 +109,7 @@ fun HomeScreen() {
                     }
                 )
             }
-            items(DummyDataSource().getDatas()) { item ->
+            items(DummyDataSource().getData()) { item ->
                 AnimatedVisibility(
                     visible = showAllItem,
                     enter = fadeIn(),

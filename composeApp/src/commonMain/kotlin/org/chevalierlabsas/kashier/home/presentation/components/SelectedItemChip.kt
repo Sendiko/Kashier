@@ -56,7 +56,7 @@ fun SelectedItemChipPreview() {
     Surface {
         SelectedItemChip(
             onRemove = { },
-            item = DummyDataSource().getDatas().first(),
+            item = DummyDataSource().getData().first(),
             modifier = Modifier.padding(16.dp)
         )
     }
