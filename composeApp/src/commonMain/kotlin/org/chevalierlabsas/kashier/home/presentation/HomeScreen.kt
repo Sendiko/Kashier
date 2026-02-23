@@ -22,12 +22,10 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
-
-    var totalPrice by remember { mutableStateOf(0.00) }
-    val selectedItems = remember { mutableStateListOf<Item>() }
-    var showSelectedItem by remember { mutableStateOf(true) }
-    var showAllItem by remember { mutableStateOf(true) }
+fun HomeScreen(
+    state: HomeState,
+    onEvent: (HomeEvent) -> Unit,
+) {
 
     Scaffold(
         topBar = {
@@ -52,7 +50,7 @@ fun HomeScreen() {
             item {
                 TotalPriceHeader(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    totalPrice = totalPrice
+                    totalPrice = state.totalPrice
                 )
             }
             item {
@@ -61,22 +59,22 @@ fun HomeScreen() {
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                     onSave = { TODO("Save data.") },
-                    enabled = selectedItems.isNotEmpty() && totalPrice > 0.00
+                    enabled = state.selectedItems.isNotEmpty() && state.totalPrice > 0.00
                 )
             }
             item {
                 HomeSeparator(
                     modifier = Modifier.padding(start = 16.dp, end = 4.dp),
                     title = stringResource(Res.string.selected_item_label),
-                    visible = showSelectedItem,
+                    visible = state.selectedItemVisible,
                     onAction = { visible ->
-                        showSelectedItem = visible
+                        onEvent(HomeEvent.OnSelectedItemVisibilityChange(visible))
                     }
                 )
             }
             item {
                 AnimatedVisibility(
-                    visible = showSelectedItem,
+                    visible = state.selectedItemVisible,
                     enter = expandVertically(),
                     exit = shrinkVertically()
                 ) {
@@ -85,11 +83,10 @@ fun HomeScreen() {
                         verticalArrangement = Arrangement.spacedBy(4.dp),
                         horizontalArrangement = Arrangement.spacedBy(4.dp),
                         content = {
-                            selectedItems.map { item ->
+                            state.selectedItems.forEach { item ->
                                 SelectedItemChip(
                                     onRemove = {
-                                        selectedItems.remove(item)
-                                        totalPrice -= item.price
+                                        onEvent(HomeEvent.OnRemoveItem(item))
                                     },
                                     item = item,
                                     modifier = Modifier.padding(horizontal = 4.dp)
@@ -103,15 +100,15 @@ fun HomeScreen() {
                 HomeSeparator(
                     modifier = Modifier.padding(start = 16.dp, end = 4.dp),
                     title = stringResource(Res.string.all_item_label),
-                    visible = showAllItem,
+                    visible = state.allItemsVisible,
                     onAction = { visible ->
-                        showAllItem = visible
+                        onEvent(HomeEvent.OnAllItemVisibilityChange(visible))
                     }
                 )
             }
             items(DummyDataSource().getData()) { item ->
                 AnimatedVisibility(
-                    visible = showAllItem,
+                    visible = state.allItemsVisible,
                     enter = fadeIn(),
                     exit = fadeOut()
                 ) {
@@ -120,8 +117,7 @@ fun HomeScreen() {
                         item = item,
                         onEdit = { },
                         onAdd = {
-                            selectedItems.add(it)
-                            totalPrice += it.price
+                            onEvent(HomeEvent.OnAddItem(item))
                         }
                     )
                 }
@@ -133,5 +129,8 @@ fun HomeScreen() {
 @Preview
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen()
+    HomeScreen(
+        state = HomeState(),
+        onEvent = {},
+    )
 }
