@@ -48,11 +48,11 @@ class HomeViewModel: ViewModel() {
     }
 
     private fun setAllItemVisibility(visible: Boolean) {
-        _state.update { it.copy(allItemsVisible = visible) }
+        _state.update { it.copy(showAllItem = visible) }
     }
 
     private fun setSelectedItemVisibility(visible: Boolean) {
-        _state.update { it.copy(selectedItemVisible = visible) }
+        _state.update { it.copy(showSelectedItem = visible) }
     }
 
     private fun search() {

@@ -65,7 +65,7 @@ fun HomeScreen(
                 HomeSeparator(
                     modifier = Modifier.padding(start = 16.dp, end = 4.dp),
                     title = stringResource(Res.string.selected_item_label),
-                    visible = state.selectedItemVisible,
+                    visible = state.showSelectedItem,
                     onAction = { visible ->
                         onEvent(HomeEvent.OnSelectedItemVisibilityChange(visible))
                     }
@@ -73,7 +73,7 @@ fun HomeScreen(
             }
             item {
                 AnimatedVisibility(
-                    visible = state.selectedItemVisible,
+                    visible = state.showSelectedItem,
                     enter = expandVertically(),
                     exit = shrinkVertically()
                 ) {
@@ -99,7 +99,7 @@ fun HomeScreen(
                 HomeSeparator(
                     modifier = Modifier.padding(start = 16.dp, end = 4.dp),
                     title = stringResource(Res.string.all_item_label),
-                    visible = state.allItemsVisible,
+                    visible = state.showAllItem,
                     onAction = { visible ->
                         onEvent(HomeEvent.OnAllItemVisibilityChange(visible))
                     }
@@ -107,7 +107,7 @@ fun HomeScreen(
             }
             items(DummyDataSource().getData()) { item ->
                 AnimatedVisibility(
-                    visible = state.allItemsVisible,
+                    visible = state.showAllItem,
                     enter = fadeIn(),
                     exit = fadeOut()
                 ) {
