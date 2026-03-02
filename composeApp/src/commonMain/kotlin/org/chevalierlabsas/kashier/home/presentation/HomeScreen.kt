@@ -32,6 +32,7 @@ import kashier.composeapp.generated.resources.selected_item_label
 import org.chevalierlabsas.kashier.home.presentation.components.HomeSeparator
 import org.chevalierlabsas.kashier.home.presentation.components.ItemCard
 import org.chevalierlabsas.kashier.home.presentation.components.SaveButton
+import org.chevalierlabsas.kashier.home.presentation.components.Searchbar
 import org.chevalierlabsas.kashier.home.presentation.components.SelectedItemChip
 import org.chevalierlabsas.kashier.home.presentation.components.TotalPriceHeader
 import org.jetbrains.compose.resources.stringResource
@@ -125,6 +126,13 @@ fun HomeScreen(
                     onAction = { visible ->
                         onEvent(HomeEvent.OnAllItemVisibilityChange(visible))
                     }
+                )
+            }
+            item {
+                Searchbar(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    value = state.searchQuery,
+                    onValueChange = { onEvent(HomeEvent.OnSearchQueryChange(it)) },
                 )
             }
             items(state.items) { item ->
