@@ -1,6 +1,10 @@
 package org.chevalierlabsas.kashier.home.presentation
 
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,14 +13,27 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import kashier.composeapp.generated.resources.*
-import org.chevalierlabsas.kashier.home.data.DummyDataSource
-import org.chevalierlabsas.kashier.home.presentation.components.*
+import kashier.composeapp.generated.resources.Res
+import kashier.composeapp.generated.resources.add_item_fab_label
+import kashier.composeapp.generated.resources.all_item_label
+import kashier.composeapp.generated.resources.app_name
+import kashier.composeapp.generated.resources.selected_item_label
+import org.chevalierlabsas.kashier.home.presentation.components.HomeSeparator
+import org.chevalierlabsas.kashier.home.presentation.components.ItemCard
+import org.chevalierlabsas.kashier.home.presentation.components.SaveButton
+import org.chevalierlabsas.kashier.home.presentation.components.SelectedItemChip
+import org.chevalierlabsas.kashier.home.presentation.components.TotalPriceHeader
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,7 +56,12 @@ fun HomeScreen(
                 onClick = { TODO("Add Item.") },
                 containerColor = MaterialTheme.colorScheme.tertiary,
                 text = { Text(text = stringResource(Res.string.add_item_fab_label)) },
-                icon = { Icon(Icons.Filled.Add, contentDescription = stringResource(Res.string.add_item_fab_label)) }
+                icon = {
+                    Icon(
+                        Icons.Filled.Add,
+                        contentDescription = stringResource(Res.string.add_item_fab_label)
+                    )
+                }
             )
         }
     ) { paddingValues ->
