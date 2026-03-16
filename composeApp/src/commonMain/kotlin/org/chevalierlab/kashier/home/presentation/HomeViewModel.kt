@@ -20,9 +20,14 @@ class HomeViewModel : ViewModel() {
             is HomeEvent.OnAllItemVisibilityChange -> setAllItemVisibility(event.isVisible)
             is HomeEvent.OnSelectedItemVisibilityChange -> setSelectedItemVisibility(event.isVisible)
             is HomeEvent.OnSearchQueryChange -> updateQuery(event.query)
+            is HomeEvent.OnShowBottomSheet -> showBottomSheet(event.show)
             HomeEvent.OnSearchQuerySubmit -> search()
             HomeEvent.OnSaveTransaction -> saveTransaction()
         }
+    }
+
+    private fun showBottomSheet(show: Boolean) {
+        _state.update { it.copy(showModalBottomSheet = show) }
     }
 
     private fun removeItem(item: Item) {
