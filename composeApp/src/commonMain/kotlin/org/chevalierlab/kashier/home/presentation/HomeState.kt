@@ -9,4 +9,8 @@ data class HomeState(
     val items: List<Item> = emptyList(),
     val selectedItems: List<Item> = emptyList(),
     val totalPrice: Double = 0.0,
+    val showModalBottomSheet: Boolean = false,
+    val itemId: Int = 0,
+    val itemName: String = "",
+    val itemPrice: String = "",
 )

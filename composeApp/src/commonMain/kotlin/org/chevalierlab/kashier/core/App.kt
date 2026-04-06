@@ -11,7 +11,6 @@ import androidx.navigation.compose.rememberNavController
 import org.chevalierlab.kashier.core.navigation.HistoryDestination
 import org.chevalierlab.kashier.core.navigation.HomeDestination
 import org.chevalierlab.kashier.history.presentation.HistoryScreen
-import org.chevalierlab.kashier.history.presentation.HistoryViewModel
 import org.chevalierlab.kashier.home.presentation.HomeScreen
 import org.chevalierlab.kashier.home.presentation.HomeViewModel
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -21,7 +20,9 @@ import org.koin.compose.viewmodel.koinViewModel
 @Preview
 fun App() {
     MaterialTheme {
+
         val navController = rememberNavController()
+
         NavHost(
             navController = navController,
             startDestination = HomeDestination
@@ -36,10 +37,7 @@ fun App() {
                 )
             }
             composable<HistoryDestination> {
-                val viewModel = viewModel<HistoryViewModel>()
-                val state by viewModel.state.collectAsStateWithLifecycle()
                 HistoryScreen(
-                    state = state,
                     onNavigateBack = { navController.navigateUp() }
                 )
             }

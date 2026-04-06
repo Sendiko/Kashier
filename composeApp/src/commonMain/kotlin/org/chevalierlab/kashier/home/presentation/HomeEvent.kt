@@ -9,6 +9,8 @@ sealed interface HomeEvent {
     data class OnAllItemVisibilityChange(val isVisible: Boolean): HomeEvent
     data class OnAddItem(val item: Item): HomeEvent
     data class OnRemoveItem(val item: Item): HomeEvent
+
+    data class OnShowBottomSheet(val show: Boolean): HomeEvent
     data object OnSaveTransaction: HomeEvent
     data object OnLoadData: HomeEvent
 }

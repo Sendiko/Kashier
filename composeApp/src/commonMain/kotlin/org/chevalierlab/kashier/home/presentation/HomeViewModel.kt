@@ -23,6 +23,7 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
             is HomeEvent.OnAllItemVisibilityChange -> setAllItemVisibility(event.isVisible)
             is HomeEvent.OnSelectedItemVisibilityChange -> setSelectedItemVisibility(event.isVisible)
             is HomeEvent.OnSearchQueryChange -> updateQuery(event.query)
+            is HomeEvent.OnShowBottomSheet -> showBottomSheet(event.show)
             HomeEvent.OnSearchQuerySubmit -> search()
             HomeEvent.OnSaveTransaction -> saveTransaction()
             HomeEvent.OnLoadData -> loadData()
@@ -35,6 +36,10 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
             val data = repository.getItems()
             _state.update { it.copy(items = data) }
         }
+    }
+
+    private fun showBottomSheet(show: Boolean) {
+        _state.update { it.copy(showModalBottomSheet = show) }
     }
 
     private fun removeItem(item: Item) {

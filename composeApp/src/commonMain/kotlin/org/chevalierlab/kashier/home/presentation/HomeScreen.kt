@@ -25,7 +25,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun HomeScreen(
     state: HomeState,
     onEvent: (HomeEvent) -> Unit,
-    onNavigate: (Any) -> Unit,
+    onNavigate: (Any) -> Unit
 ) {
 
     LaunchedEffect(state.items) {
@@ -54,13 +54,24 @@ fun HomeScreen(
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                onClick = { TODO("Add Item.") },
+                onClick = { onEvent(HomeEvent.OnShowBottomSheet(true)) },
                 containerColor = MaterialTheme.colorScheme.tertiary,
                 text = { Text(text = stringResource(Res.string.add_item_fab_label)) },
                 icon = { Icon(Icons.Filled.Add, contentDescription = stringResource(Res.string.add_item_fab_label)) }
             )
         }
     ) { paddingValues ->
+        if (state.showModalBottomSheet) {
+            ItemModalBottomSheet(
+                itemId = state.itemId,
+                itemName = state.itemName,
+                onItemNameChange = {  },
+                itemPrice = state.itemPrice,
+                onItemPriceChange = {  },
+                onSubmit = {  },
+                onDismissRequest = { onEvent(HomeEvent.OnShowBottomSheet(false)) }
+            )
+        }
         LazyColumn(
             contentPadding = PaddingValues(top = paddingValues.calculateTopPadding(), bottom = 76.dp),
         ) {
