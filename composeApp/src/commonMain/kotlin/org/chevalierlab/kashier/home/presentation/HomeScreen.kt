@@ -24,7 +24,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun HomeScreen(
     state: HomeState,
     onEvent: (HomeEvent) -> Unit,
-    onNavigate: (Any) -> Unit,
+    onNavigate: (Any) -> Unit
 ) {
     Scaffold(
         topBar = {
