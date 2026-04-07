@@ -6,5 +6,6 @@ import org.koin.android.ext.koin.androidContext
 class KashierApp: Application() {
     override fun onCreate() {
         super.onCreate()
+
     }
 }
