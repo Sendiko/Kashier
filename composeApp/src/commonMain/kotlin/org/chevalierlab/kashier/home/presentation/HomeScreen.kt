@@ -10,13 +10,18 @@ import androidx.compose.material.icons.filled.History
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kashier.composeapp.generated.resources.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.chevalierlab.kashier.core.navigation.HistoryDestination
 import org.chevalierlab.kashier.home.presentation.components.*
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -27,6 +32,27 @@ fun HomeScreen(
     onEvent: (HomeEvent) -> Unit,
     onNavigate: (Any) -> Unit
 ) {
+    // Buat coroutineScope
+    val scope = rememberCoroutineScope()
+    // Snackbar untuk melihatkan hasil ID unik.
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    // Cek state username
+    LaunchedEffect(state.userName) {
+        delay(500) // Beri waktu Preferences untuk load value.
+        if (state.userName.isBlank()) {
+            // Jika kosong maka generate.
+            onEvent(HomeEvent.CreateUserName)
+        } else {
+            // Jika tidak, maka tampilkan di Snackbar
+            scope.launch {
+                snackbarHostState.showSnackbar(
+                    message = "Username telah dibuat: " + state.userName,
+                    withDismissAction = true
+                )
+            }
+        }
+    }
 
     LaunchedEffect(state.items) {
         if (state.items.isEmpty()) {
@@ -35,6 +61,7 @@ fun HomeScreen(
     }
 
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
                 title = {

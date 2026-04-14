@@ -13,4 +13,5 @@ data class HomeState(
     val itemId: Int = 0,
     val itemName: String = "",
     val itemPrice: String = "",
+    val userName: String = ""
 )

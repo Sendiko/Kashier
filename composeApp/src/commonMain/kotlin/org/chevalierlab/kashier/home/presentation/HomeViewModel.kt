@@ -4,7 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.chevalierlab.kashier.home.data.datasource.DummyDataSource
@@ -13,8 +16,11 @@ import org.chevalierlab.kashier.home.domain.repository.HomeRepository
 
 class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
 
+    private val _userName = repository.getUser()
     private val _state = MutableStateFlow(HomeState())
-    val state = _state.asStateFlow()
+    val state = combine(_state, _userName) { state, userName ->
+        state.copy(userName = userName)
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), HomeState())
 
     fun onEvent(event: HomeEvent) {
         when (event) {
@@ -27,7 +33,12 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
             HomeEvent.OnSearchQuerySubmit -> search()
             HomeEvent.OnSaveTransaction -> saveTransaction()
             HomeEvent.OnLoadData -> loadData()
+            HomeEvent.CreateUserName -> createUsername()
         }
+    }
+
+    private fun createUsername() {
+        viewModelScope.launch { repository.createUser() }
     }
 
     private fun loadData() {

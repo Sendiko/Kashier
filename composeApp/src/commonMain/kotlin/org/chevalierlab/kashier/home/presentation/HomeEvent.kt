@@ -13,4 +13,5 @@ sealed interface HomeEvent {
     data class OnShowBottomSheet(val show: Boolean): HomeEvent
     data object OnSaveTransaction: HomeEvent
     data object OnLoadData: HomeEvent
+    data object CreateUserName: HomeEvent
 }
