@@ -1,9 +1,7 @@
 package org.chevalierlab.kashier.home.data.datasource
 
-import org.chevalierlab.kashier.home.data.dto.ItemsItem
 import org.chevalierlab.kashier.home.data.dto.ItemsResponse
 import org.chevalierlab.kashier.home.data.dto.PostItemRequest
-import org.chevalierlab.kashier.home.domain.models.Item
 
 interface ItemRemoteDataSource {
 
