@@ -19,4 +19,6 @@ interface HomeRepository {
 
     fun getUser(): Flow<String>
 
+    suspend fun saveUser(user: String): Result<Boolean>
+
 }

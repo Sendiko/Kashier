@@ -5,20 +5,24 @@ import org.chevalierlab.kashier.home.data.datasource.DummyDataSource
 import org.chevalierlab.kashier.home.data.datasource.ItemRemoteDataSource
 import org.chevalierlab.kashier.home.data.datasource.TransactionRemoteDataSource
 import org.chevalierlab.kashier.home.data.datasource.UserLocalDataSource
+import org.chevalierlab.kashier.home.data.datasource.UserRemoteDataSource
 import org.chevalierlab.kashier.home.data.datasource.getDeviceName
 import org.chevalierlab.kashier.home.data.dto.CreateTransactionRequest
+import org.chevalierlab.kashier.home.data.dto.CreateUserRequest
+import org.chevalierlab.kashier.home.data.dto.PostItemRequest
 import org.chevalierlab.kashier.home.domain.models.Item
 import org.chevalierlab.kashier.home.domain.repository.HomeRepository
 
 class HomeRepositoryImpl(
     private val dataSource: DummyDataSource,
     private val transactionDataSource: TransactionRemoteDataSource,
-    private val remoteDataSource: ItemRemoteDataSource,
-    private val userLocalDataSource: UserLocalDataSource
+    private val userLocalDataSource: UserLocalDataSource,
+    private val itemRemoteDataSource: ItemRemoteDataSource,
+    private val userRemoteDataSource: UserRemoteDataSource,
 ) : HomeRepository {
 
     override suspend fun getItems(userId: String): Result<List<Item>> {
-        val result = remoteDataSource.getItems(userId)
+        val result = itemRemoteDataSource.getItems(userId.replace(" ", "_"))
 
         return if (result.isSuccess) {
             try {
@@ -33,7 +37,17 @@ class HomeRepositoryImpl(
     }
 
     override suspend fun postItem(item: Item): Result<Boolean> {
-        TODO("Not yet implemented")
+        val request = PostItemRequest(
+            price = item.price.toInt(),
+            name = item.name,
+            userId = item.userId.replace(" ", "_")
+        )
+        val result = itemRemoteDataSource.postItem(request)
+        return if (result.isSuccess) {
+            Result.success(true)
+        } else {
+            Result.failure(result.exceptionOrNull() ?: Exception("Unknown error."))
+        }
     }
 
     override suspend fun deleteItem(id: Int): Result<Boolean> {
@@ -62,10 +76,19 @@ class HomeRepositoryImpl(
         val randomIdentifier = (1..10).map { allowedChars.random() }.joinToString("")
         val userIdentifier = "${getDeviceName()}_$randomIdentifier"
         userLocalDataSource.saveUser(userIdentifier)
+        saveUser(userIdentifier)
     }
 
     override fun getUser(): Flow<String> {
         return userLocalDataSource.getUser()
+    }
+
+    override suspend fun saveUser(user: String): Result<Boolean> {
+        val request = CreateUserRequest(user.replace(" ", "_"))
+        val result = userRemoteDataSource.createUser(request)
+        return if (result.isSuccess) {
+            Result.success(true)
+        } else Result.failure(result.exceptionOrNull() ?: Exception("Unknown error."))
     }
 
 }

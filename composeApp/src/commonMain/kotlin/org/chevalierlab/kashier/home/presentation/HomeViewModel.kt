@@ -2,12 +2,7 @@ package org.chevalierlab.kashier.home.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import org.chevalierlab.kashier.home.domain.models.Item
 import org.chevalierlab.kashier.home.domain.repository.HomeRepository
@@ -31,11 +26,25 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
             HomeEvent.OnSaveTransaction -> saveTransaction()
             HomeEvent.OnLoadData -> loadData()
             HomeEvent.CreateUserName -> createUser()
+            is HomeEvent.OnPostItem -> postItem(event.name, event.price)
+        }
+    }
+
+    private fun postItem(name: String, price: String) {
+        viewModelScope.launch {
+            _state.update { it.copy(isLoading = true) }
+            repository.postItem(
+                Item(0, state.value.userName, name = name, price = price.toDouble())
+            )
+            loadData()
+            _state.update { it.copy(isLoading = false) }
         }
     }
 
     private fun createUser() {
-        viewModelScope.launch { repository.createUser() }
+        viewModelScope.launch {
+            repository.createUser()
+        }
     }
 
     private fun loadData() {

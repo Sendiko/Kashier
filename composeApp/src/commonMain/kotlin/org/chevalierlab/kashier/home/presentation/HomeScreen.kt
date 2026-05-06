@@ -9,10 +9,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,6 +21,7 @@ import kashier.composeapp.generated.resources.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.chevalierlab.kashier.core.navigation.HistoryDestination
+import org.chevalierlab.kashier.home.domain.models.Item
 import org.chevalierlab.kashier.home.presentation.components.*
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
@@ -36,9 +36,10 @@ fun HomeScreen(
 ) {
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+    var isAddItemSheetOpen by remember { mutableStateOf(false) }
 
-    LaunchedEffect(state.items) {
-        if (state.items.isEmpty()) {
+    LaunchedEffect(state.items, state.userName) {
+        if (state.items.isEmpty() && state.userName.isNotEmpty()) {
             onEvent(HomeEvent.OnLoadData)
         }
     }
@@ -57,20 +58,17 @@ fun HomeScreen(
         }
     }
 
-    Box {
-        AnimatedVisibility(
-            visible = state.isLoading,
-            enter = fadeIn(),
-            exit = fadeOut()
-        ) {
-            Box(
-                modifier = Modifier.fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.5f)),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+    if (isAddItemSheetOpen) {
+        AddItemBottomSheet(
+            onDismissRequest = { isAddItemSheetOpen = false },
+            onSave = { name, price ->
+                onEvent(HomeEvent.OnPostItem(name, price))
+                isAddItemSheetOpen = false
             }
-        }
+        )
+    }
+
+    Box {
         Scaffold(
             snackbarHost = { SnackbarHost(snackbarHostState) },
             topBar = {
@@ -92,10 +90,15 @@ fun HomeScreen(
             },
             floatingActionButton = {
                 ExtendedFloatingActionButton(
-                    onClick = { TODO("Add Item.") },
+                    onClick = { isAddItemSheetOpen = true },
                     containerColor = MaterialTheme.colorScheme.tertiary,
                     text = { Text(text = stringResource(Res.string.add_item_fab_label)) },
-                    icon = { Icon(Icons.Filled.Add, contentDescription = stringResource(Res.string.add_item_fab_label)) }
+                    icon = {
+                        Icon(
+                            Icons.Filled.Add,
+                            contentDescription = stringResource(Res.string.add_item_fab_label)
+                        )
+                    }
                 )
             }
         ) { paddingValues ->
@@ -203,6 +206,19 @@ fun HomeScreen(
                         )
                     }
                 }
+            }
+        }
+        AnimatedVisibility(
+            visible = state.isLoading,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            Box(
+                modifier = Modifier.fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.5f)),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
         }
     }

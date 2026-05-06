@@ -28,7 +28,7 @@ data class ItemsItem(
     fun toDomain(): Item {
         return Item(
             id = id,
-            userId = userId,
+            userId = "",
             name = name,
             price = price.toDouble()
         )

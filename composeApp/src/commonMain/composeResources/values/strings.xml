@@ -14,4 +14,9 @@
     <string name="navigate_back">Kembali</string>
     <string name="user_created">User successfully created: </string>
     <string name="dismiss">Dismiss</string>
+    <string name="add_item_title">Tambah Barang</string>
+    <string name="item_name_label">Nama barang</string>
+    <string name="item_name_placeholder">Beri nama barang</string>
+    <string name="item_price_label">Harga barang</string>
+    <string name="item_price_placeholder">Rp. 000,00</string>
 </resources>
