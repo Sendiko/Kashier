@@ -30,6 +30,7 @@ val sharedModules = module {
     singleOf(::TransactionRemoteDataSourceImpl).bind<TransactionRemoteDataSource>()
     singleOf(::UserRemoteDataSourceImpl).bind<UserRemoteDataSource>()
     singleOf(::ItemRemoteDataSourceImpl).bind<ItemRemoteDataSource>()
+    singleOf(::TransactionRemoteDataSourceImpl).bind<TransactionRemoteDataSource>()
     singleOf(::HomeRepositoryImpl).bind<HomeRepository>()
 
     factory { AppPreferences(get()) }

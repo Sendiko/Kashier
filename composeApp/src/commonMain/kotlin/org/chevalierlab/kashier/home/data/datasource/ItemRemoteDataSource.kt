@@ -2,6 +2,7 @@ package org.chevalierlab.kashier.home.data.datasource
 
 import org.chevalierlab.kashier.home.data.dto.ItemsResponse
 import org.chevalierlab.kashier.home.data.dto.PostItemRequest
+import org.chevalierlab.kashier.home.data.dto.PostItemResponse
 
 interface ItemRemoteDataSource {
 
@@ -9,7 +10,7 @@ interface ItemRemoteDataSource {
 
     suspend fun updateItem(id: Int, request: PostItemRequest): Result<Boolean>
 
-    suspend fun postItem(request: PostItemRequest): Result<Boolean>
+    suspend fun postItem(request: PostItemRequest): Result<PostItemResponse>
 
     suspend fun deleteItem(id: Int): Result<Boolean>
 

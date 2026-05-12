@@ -1,12 +1,7 @@
 package org.chevalierlab.kashier.home.data
 
 import kotlinx.coroutines.flow.Flow
-import org.chevalierlab.kashier.home.data.datasource.DummyDataSource
-import org.chevalierlab.kashier.home.data.datasource.ItemRemoteDataSource
-import org.chevalierlab.kashier.home.data.datasource.TransactionRemoteDataSource
-import org.chevalierlab.kashier.home.data.datasource.UserLocalDataSource
-import org.chevalierlab.kashier.home.data.datasource.UserRemoteDataSource
-import org.chevalierlab.kashier.home.data.datasource.getDeviceName
+import org.chevalierlab.kashier.home.data.datasource.*
 import org.chevalierlab.kashier.home.data.dto.CreateTransactionRequest
 import org.chevalierlab.kashier.home.data.dto.CreateUserRequest
 import org.chevalierlab.kashier.home.data.dto.PostItemRequest
@@ -63,7 +58,7 @@ class HomeRepositoryImpl(
         val result = transactionDataSource.createTransaction(request)
 
         return when (result) {
-            200 -> Result.success(true)
+            201 -> Result.success(true)
             400 -> Result.failure(Exception("Bad Request."))
             401 -> Result.failure(Exception("Unauthorized."))
             500 -> Result.failure(Exception("Server Error."))

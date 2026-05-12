@@ -81,13 +81,17 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
 
     private fun saveTransaction() {
         viewModelScope.launch {
+            _state.update { it.copy(isLoading = true) }
             repository.postTransaction(
                 total = state.value.totalPrice.toInt(),
                 userId = state.value.userName,
                 items = state.value.selectedItems.count()
             )
                 .onSuccess {
-
+                    _state.update { it.copy(isLoading = true) }
+                }
+                .onFailure { error ->
+                    _state.update { it.copy(isLoading = false, errorMessage = error.message) }
                 }
         }
     }

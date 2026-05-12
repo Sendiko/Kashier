@@ -58,6 +58,15 @@ fun HomeScreen(
         }
     }
 
+    LaunchedEffect(state.errorMessage) {
+        if (!state.errorMessage.isNullOrEmpty()) {
+            snackbarHostState.showSnackbar(
+                message = state.errorMessage,
+                withDismissAction = true
+            )
+        }
+    }
+
     if (isAddItemSheetOpen) {
         AddItemBottomSheet(
             onDismissRequest = { isAddItemSheetOpen = false },
@@ -116,7 +125,7 @@ fun HomeScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp),
-                        onSave = { TODO("Save data.") },
+                        onSave = { onEvent(HomeEvent.OnSaveTransaction) },
                         enabled = state.selectedItems.isNotEmpty() && state.totalPrice > 0.00
                     )
                 }

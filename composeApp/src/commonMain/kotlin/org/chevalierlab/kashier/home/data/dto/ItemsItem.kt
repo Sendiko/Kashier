@@ -17,7 +17,7 @@ data class ItemsItem(
 	val name: String,
 
 	@SerialName("id")
-	val id: Int,
+	val id: Int?,
 
 	@SerialName("userId")
 	val userId: String,
@@ -27,7 +27,7 @@ data class ItemsItem(
 ) {
     fun toDomain(): Item {
         return Item(
-            id = id,
+            id = id ?: 0,
             userId = "",
             name = name,
             price = price.toDouble()
