@@ -88,7 +88,7 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
                 items = state.value.selectedItems.count()
             )
                 .onSuccess {
-                    _state.update { it.copy(isLoading = true) }
+                    _state.update { it.copy(isLoading = false) }
                 }
                 .onFailure { error ->
                     _state.update { it.copy(isLoading = false, errorMessage = error.message) }
