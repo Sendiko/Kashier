@@ -10,7 +10,7 @@ class TransactionRemoteDataSourceImpl(
     private val client: HttpClient
 ) : TransactionRemoteDataSource {
     override suspend fun createTransaction(request: CreateTransactionRequest): Int {
-        val response = client.post(urlString = "$BASE_URL/$V1/transaction") {
+        val response = client.post(urlString = "$BASE_URL/$V1/history") {
             setBody(request)
         }
         return response.status.value
