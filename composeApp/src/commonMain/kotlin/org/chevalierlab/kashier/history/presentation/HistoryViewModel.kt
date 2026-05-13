@@ -27,10 +27,11 @@ class HistoryViewModel(
     }
 
     private fun loadData() {
+        _state.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             repository.getHistoryItems(state.value.userId)
                 .onSuccess { historyItems ->
-                    _state.update { it.copy(histories = groupHistoryByDate(historyItems)) }
+                    _state.update { it.copy(histories = groupHistoryByDate(historyItems), isLoading = false) }
                 }
         }
     }

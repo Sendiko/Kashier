@@ -1,6 +1,11 @@
 package org.chevalierlab.kashier.core.di
 
 import org.chevalierlab.kashier.core.preferences.AppPreferences
+import org.chevalierlab.kashier.history.data.HistoryRepositoryImpl
+import org.chevalierlab.kashier.history.data.datasource.HistoryRemoteDataSource
+import org.chevalierlab.kashier.history.data.datasource.HistoryRemoteDataSourceImpl
+import org.chevalierlab.kashier.history.domain.HistoryRepository
+import org.chevalierlab.kashier.history.presentation.HistoryViewModel
 import org.chevalierlab.kashier.home.data.HomeRepositoryImpl
 import org.chevalierlab.kashier.home.data.datasource.DummyDataSource
 import org.chevalierlab.kashier.home.data.datasource.DummyDataSourceImpl
@@ -31,8 +36,11 @@ val sharedModules = module {
     singleOf(::UserRemoteDataSourceImpl).bind<UserRemoteDataSource>()
     singleOf(::ItemRemoteDataSourceImpl).bind<ItemRemoteDataSource>()
     singleOf(::TransactionRemoteDataSourceImpl).bind<TransactionRemoteDataSource>()
+    singleOf(::HistoryRemoteDataSourceImpl).bind<HistoryRemoteDataSource>()
     singleOf(::HomeRepositoryImpl).bind<HomeRepository>()
+    singleOf(::HistoryRepositoryImpl).bind<HistoryRepository>()
 
     factory { AppPreferences(get()) }
     factory { HomeViewModel(get()) }
+    factory { HistoryViewModel(get()) }
 }

@@ -36,10 +36,11 @@ fun App() {
                 )
             }
             composable<HistoryDestination> {
-                val viewModel = viewModel<HistoryViewModel>()
+                val viewModel = koinViewModel<HistoryViewModel>()
                 val state by viewModel.state.collectAsStateWithLifecycle()
                 HistoryScreen(
                     state = state,
+                    onEvent = viewModel::onEvent,
                     onNavigateBack = { navController.navigateUp() }
                 )
             }
