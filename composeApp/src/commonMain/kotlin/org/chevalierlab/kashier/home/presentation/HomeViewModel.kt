@@ -26,15 +26,48 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
             HomeEvent.OnSaveTransaction -> saveTransaction()
             HomeEvent.OnLoadData -> loadData()
             HomeEvent.CreateUserName -> createUser()
-            is HomeEvent.OnPostItem -> postItem(event.name, event.price)
+            is HomeEvent.OnPostItem -> postItem()
+            HomeEvent.DismissItemSheet -> dismissItemSheet()
+            is HomeEvent.OnItemNameChanged -> changeItemName(event.name)
+            is HomeEvent.OnItemPriceChanged -> changeItemPrice(event.price)
+            HomeEvent.ShowItemSheet -> showItemSheet()
         }
     }
 
-    private fun postItem(name: String, price: String) {
+    private fun showItemSheet() {
+        _state.update { it.copy(itemSheetOpen = true) }
+    }
+
+    private fun changeItemName(name: String) {
+        _state.update {
+            it.copy(
+                itemName = name
+            )
+        }
+    }
+
+    private fun changeItemPrice(price: String) {
+        _state.update {
+            it.copy(
+                itemPrice = price
+            )
+        }
+    }
+
+    private fun dismissItemSheet() {
+        _state.update { it.copy(itemSheetOpen = false) }
+    }
+
+    private fun postItem() {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
             repository.postItem(
-                Item(0, state.value.userName, name = name, price = price.toDouble())
+                Item(
+                    id = 0,
+                    userId = state.value.userName,
+                    name = state.value.itemName,
+                    price = state.value.itemPrice.toDouble(),
+                )
             )
             loadData()
             _state.update { it.copy(isLoading = false) }

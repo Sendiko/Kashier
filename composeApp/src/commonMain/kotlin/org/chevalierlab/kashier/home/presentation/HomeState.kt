@@ -11,5 +11,8 @@ data class HomeState(
     val totalPrice: Double = 0.0,
     val userName: String = "",
     val isLoading: Boolean = false,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+    val itemSheetOpen: Boolean = false,
+    val itemName: String = "",
+    val itemPrice: String = "",
 )

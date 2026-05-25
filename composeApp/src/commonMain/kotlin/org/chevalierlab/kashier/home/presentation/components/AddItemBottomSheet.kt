@@ -3,7 +3,7 @@ package org.chevalierlab.kashier.home.presentation.components
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -15,14 +15,16 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddItemBottomSheet(
+fun ItemBottomSheet(
     onDismissRequest: () -> Unit,
-    onSave: (name: String, price: String) -> Unit,
+    onSave: () -> Unit,
+    onItemNameChange: (String) -> Unit,
+    onItemPriceChange: (String) -> Unit,
+    itemName: String,
+    itemPrice: String,
     modifier: Modifier = Modifier,
 ) {
     val sheetState = rememberModalBottomSheetState()
-    var itemName by remember { mutableStateOf("") }
-    var itemPrice by remember { mutableStateOf("") }
 
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
@@ -39,10 +41,10 @@ fun AddItemBottomSheet(
     ) {
         AddItemContent(
             itemName = itemName,
-            onItemNameChange = { itemName = it },
+            onItemNameChange = { onItemNameChange(it) },
             itemPrice = itemPrice,
-            onItemPriceChange = { itemPrice = it },
-            onSave = { onSave(itemName, itemPrice) }
+            onItemPriceChange = { onItemPriceChange(it) },
+            onSave = { onSave() }
         )
     }
 }

@@ -9,9 +9,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,11 +22,11 @@ import kashier.composeapp.generated.resources.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.chevalierlab.kashier.core.navigation.HistoryDestination
-import org.chevalierlab.kashier.home.domain.models.Item
 import org.chevalierlab.kashier.home.presentation.components.*
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -36,7 +37,6 @@ fun HomeScreen(
 ) {
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
-    var isAddItemSheetOpen by remember { mutableStateOf(false) }
 
     LaunchedEffect(state.items, state.userName) {
         if (state.items.isEmpty() && state.userName.isNotEmpty()) {
@@ -45,7 +45,7 @@ fun HomeScreen(
     }
 
     LaunchedEffect(state.userName) {
-        delay(500)
+        delay(500.milliseconds)
         if (state.userName.isBlank()) {
             onEvent(HomeEvent.CreateUserName)
         } else {
@@ -67,13 +67,17 @@ fun HomeScreen(
         }
     }
 
-    if (isAddItemSheetOpen) {
-        AddItemBottomSheet(
-            onDismissRequest = { isAddItemSheetOpen = false },
-            onSave = { name, price ->
-                onEvent(HomeEvent.OnPostItem(name, price))
-                isAddItemSheetOpen = false
-            }
+    if (state.itemSheetOpen) {
+        ItemBottomSheet(
+            itemName = state.itemName,
+            itemPrice = state.itemPrice,
+            onDismissRequest = { onEvent(HomeEvent.DismissItemSheet) },
+            onSave = {
+                onEvent(HomeEvent.OnPostItem)
+                onEvent(HomeEvent.DismissItemSheet)
+            },
+            onItemNameChange = { onEvent(HomeEvent.OnItemNameChanged(it)) },
+            onItemPriceChange = { onEvent(HomeEvent.OnItemPriceChanged(it)) },
         )
     }
 
@@ -99,7 +103,7 @@ fun HomeScreen(
             },
             floatingActionButton = {
                 ExtendedFloatingActionButton(
-                    onClick = { isAddItemSheetOpen = true },
+                    onClick = { onEvent(HomeEvent.ShowItemSheet) },
                     containerColor = MaterialTheme.colorScheme.tertiary,
                     text = { Text(text = stringResource(Res.string.add_item_fab_label)) },
                     icon = {

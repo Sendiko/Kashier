@@ -25,12 +25,12 @@ data class ItemsItem(
 	@SerialName("updatedAt")
 	val updatedAt: String
 ) {
-    fun toDomain(): Item {
-        return Item(
-            id = id ?: 0,
-            userId = "",
-            name = name,
-            price = price.toDouble()
-        )
-    }
+	fun toDomain(): Item {
+		return Item(
+			id = id ?: 0,
+			userId = "",
+			name = name,
+			price = price.toDouble()
+		)
+	}
 }
