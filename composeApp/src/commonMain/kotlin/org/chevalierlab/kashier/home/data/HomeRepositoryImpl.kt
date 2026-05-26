@@ -45,14 +45,6 @@ class HomeRepositoryImpl(
         }
     }
 
-    override suspend fun deleteItem(id: Int): Result<Boolean> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun putItem(item: Item): Result<Boolean> {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun postTransaction(total: Int, userId: String, items: Int): Result<Boolean> {
         val request = CreateTransactionRequest(total, userId, items)
         val result = transactionDataSource.createTransaction(request)
@@ -84,6 +76,29 @@ class HomeRepositoryImpl(
         return if (result.isSuccess) {
             Result.success(true)
         } else Result.failure(result.exceptionOrNull() ?: Exception("Unknown error."))
+    }
+
+    override suspend fun deleteItem(id: Int): Result<Boolean> {
+        val result = itemRemoteDataSource.deleteItem(id)
+        return if (result.isSuccess) {
+            Result.success(true)
+        } else {
+            Result.failure(result.exceptionOrNull() ?: Exception("Unknown error."))
+        }
+    }
+
+    override suspend fun putItem(item: Item): Result<Boolean> {
+        val request = PostItemRequest(
+            price = item.price.toInt(),
+            name = item.name,
+            userId = item.userId.replace(" ", "_")
+        )
+        val result = itemRemoteDataSource.updateItem(item.id, request)
+        return if (result.isSuccess) {
+            Result.success(true)
+        } else {
+            Result.failure(result.exceptionOrNull() ?: Exception("Unknown error."))
+        }
     }
 
 }

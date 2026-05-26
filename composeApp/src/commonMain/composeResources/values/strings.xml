@@ -2,6 +2,7 @@
     <string name="app_name">Kashier</string>
     <string name="searchbar_hint">Cari barang...</string>
     <string name="save_button_label">Simpan</string>
+    <string name="delete_button_label">Hapus</string>
     <string name="total_price_label">Total Harga</string>
     <string name="expand_desc">Expand/Collapse</string>
     <string name="add_item">Add Item</string>
@@ -15,6 +16,7 @@
     <string name="user_created">User successfully created: </string>
     <string name="dismiss">Dismiss</string>
     <string name="add_item_title">Tambah Barang</string>
+    <string name="edit_item_title">Edit Barang</string>
     <string name="item_name_label">Nama barang</string>
     <string name="item_name_placeholder">Beri nama barang</string>
     <string name="item_price_label">Harga barang</string>

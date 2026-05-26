@@ -13,6 +13,8 @@ data class HomeState(
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
     val itemSheetOpen: Boolean = false,
+    val itemId: Int = 0,
     val itemName: String = "",
     val itemPrice: String = "",
+    val isEditing: Boolean = false,
 )

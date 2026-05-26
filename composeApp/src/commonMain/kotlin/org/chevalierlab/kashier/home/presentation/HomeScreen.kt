@@ -72,12 +72,11 @@ fun HomeScreen(
             itemName = state.itemName,
             itemPrice = state.itemPrice,
             onDismissRequest = { onEvent(HomeEvent.DismissItemSheet) },
-            onSave = {
-                onEvent(HomeEvent.OnPostItem)
-                onEvent(HomeEvent.DismissItemSheet)
-            },
             onItemNameChange = { onEvent(HomeEvent.OnItemNameChanged(it)) },
             onItemPriceChange = { onEvent(HomeEvent.OnItemPriceChanged(it)) },
+            onSave = { onEvent(HomeEvent.OnPostItem) },
+            onDelete = { onEvent(HomeEvent.OnDeleteItem(state.itemId)) },
+            isEditing = state.isEditing
         )
     }
 
@@ -212,7 +211,15 @@ fun HomeScreen(
                         ItemCard(
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
                             item = item,
-                            onEdit = { },
+                            onEdit = {
+                                onEvent(
+                                    HomeEvent.OnSetItem(
+                                        itemId = item.id,
+                                        itemName = item.name,
+                                        itemPrice = item.price.toString()
+                                    )
+                                )
+                            },
                             onAdd = {
                                 onEvent(HomeEvent.OnAddItem(item))
                             }

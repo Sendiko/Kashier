@@ -31,11 +31,56 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
             is HomeEvent.OnItemNameChanged -> changeItemName(event.name)
             is HomeEvent.OnItemPriceChanged -> changeItemPrice(event.price)
             HomeEvent.ShowItemSheet -> showItemSheet()
+            is HomeEvent.OnSetItem -> setItem(event.itemId, event.itemName, event.itemPrice)
+            is HomeEvent.OnDeleteItem -> deleteItem(event.itemId)
+        }
+    }
+
+    private fun deleteItem(itemId: Int) {
+        viewModelScope.launch {
+            _state.update { it.copy(isLoading = true) }
+            repository.deleteItem(itemId)
+                .onSuccess {
+                    _state.update {
+                        dismissItemSheet()
+                        it.copy(isLoading = false)
+                    }
+                }
+                .onFailure { error ->
+                    _state.update {
+                        dismissItemSheet()
+                        it.copy(isLoading = false, errorMessage = error.message)
+                    }
+                }
+            loadData()
+        }
+    }
+
+    private fun setItem( itemId: Int, itemName: String, itemPrice: String) {
+        _state.update {
+            it.copy(
+                itemName = itemName,
+                itemPrice = itemPrice,
+                itemSheetOpen = true,
+                isEditing = true,
+                itemId = itemId
+            )
         }
     }
 
     private fun showItemSheet() {
         _state.update { it.copy(itemSheetOpen = true) }
+    }
+
+    private fun dismissItemSheet() {
+        _state.update {
+            it.copy(
+                itemSheetOpen = false,
+                isEditing = false,
+                itemName = "",
+                itemPrice = ""
+            )
+        }
     }
 
     private fun changeItemName(name: String) {
@@ -54,23 +99,22 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
         }
     }
 
-    private fun dismissItemSheet() {
-        _state.update { it.copy(itemSheetOpen = false) }
-    }
-
     private fun postItem() {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
-            repository.postItem(
-                Item(
-                    id = 0,
-                    userId = state.value.userName,
-                    name = state.value.itemName,
-                    price = state.value.itemPrice.toDouble(),
-                )
+            val request = Item(
+                id = state.value.itemId,
+                userId = state.value.userName,
+                name = state.value.itemName,
+                price = state.value.itemPrice.toDouble(),
             )
+            if (state.value.isEditing) {
+                repository.putItem(request)
+            } else {
+                repository.postItem(request)
+            }
             loadData()
-            _state.update { it.copy(isLoading = false) }
+            _state.update { it.copy(isLoading = false, itemSheetOpen = false) }
         }
     }
 
