@@ -12,6 +12,19 @@ class AppPreferences(
 ) {
 
     private val userKey = stringPreferencesKey("USER_KEY")
+    private val tokenKey = stringPreferencesKey("TOKEN_KEY")
+
+    suspend fun setToken(token: String) {
+        dataStore.edit { preferences ->
+            preferences[tokenKey] = token
+        }
+    }
+
+    fun getToken(): Flow<String> {
+        return dataStore.data.map { preferences ->
+            preferences[tokenKey] ?: ""
+        }
+    }
 
     suspend fun saveUserKey(userKey: String) {
         dataStore.edit { preferences ->
