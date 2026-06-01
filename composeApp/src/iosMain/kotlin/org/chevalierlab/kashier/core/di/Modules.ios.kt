@@ -9,6 +9,6 @@ import org.koin.dsl.module
 
 actual val platformModules: Module
     get() = module {
-        single<HttpClient> { HttpClientFactory.create(Darwin.create()) }
+        single<HttpClient> { HttpClientFactory.create(Darwin.create(), get()) }
         single { createDataStore() }
     }

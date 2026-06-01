@@ -10,6 +10,6 @@ import org.koin.dsl.module
 
 actual val platformModules: Module
     get() = module {
-        single<HttpClient> { HttpClientFactory.create(OkHttp.create()) }
+        single<HttpClient> { HttpClientFactory.create(OkHttp.create(), get()) }
         single { createDataStore(androidContext()) }
     }
