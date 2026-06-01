@@ -9,7 +9,6 @@ import org.chevalierlab.kashier.home.domain.models.Item
 import org.chevalierlab.kashier.home.domain.repository.HomeRepository
 
 class HomeRepositoryImpl(
-    private val dataSource: DummyDataSource,
     private val transactionDataSource: TransactionRemoteDataSource,
     private val userLocalDataSource: UserLocalDataSource,
     private val itemRemoteDataSource: ItemRemoteDataSource,
@@ -70,9 +69,14 @@ class HomeRepositoryImpl(
         return userLocalDataSource.getUser()
     }
 
+    override fun getToken(): Flow<String> {
+        return userLocalDataSource.getToken()
+    }
+
     override suspend fun saveUser(user: String): Result<Boolean> {
         val request = CreateUserRequest(user.replace(" ", "_"))
         val result = userRemoteDataSource.createUser(request)
+        userLocalDataSource.setToken(result.getOrNull()?.user?.token ?: "")
         return if (result.isSuccess) {
             Result.success(true)
         } else Result.failure(result.exceptionOrNull() ?: Exception("Unknown error."))
