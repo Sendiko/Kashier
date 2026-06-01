@@ -9,10 +9,11 @@ import org.chevalierlab.kashier.home.domain.repository.HomeRepository
 
 class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
 
+    private val _token = repository.getToken()
     private val _userName = repository.getUser()
     private val _state = MutableStateFlow(HomeState())
-    val state = combine(_state, _userName) { state, userName ->
-        state.copy(userName = userName)
+    val state = combine(_state, _userName, _token) { state, userName, token ->
+        state.copy(userName = userName, tokenLoaded = token.isNotBlank())
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), HomeState())
 
     fun onEvent(event: HomeEvent) {

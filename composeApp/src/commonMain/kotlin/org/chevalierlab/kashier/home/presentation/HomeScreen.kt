@@ -38,8 +38,8 @@ fun HomeScreen(
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(state.items, state.userName) {
-        if (state.items.isEmpty() && state.userName.isNotEmpty()) {
+    LaunchedEffect(state.items, state.userName, state.tokenLoaded) {
+        if (state.items.isEmpty() && state.userName.isNotEmpty() && state.tokenLoaded) {
             onEvent(HomeEvent.OnLoadData)
         }
     }

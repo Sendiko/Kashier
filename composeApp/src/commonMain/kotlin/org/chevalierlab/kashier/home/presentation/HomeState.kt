@@ -17,4 +17,5 @@ data class HomeState(
     val itemName: String = "",
     val itemPrice: String = "",
     val isEditing: Boolean = false,
+    val tokenLoaded: Boolean = false,
 )
