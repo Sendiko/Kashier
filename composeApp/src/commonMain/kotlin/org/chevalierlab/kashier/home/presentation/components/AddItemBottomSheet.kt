@@ -32,10 +32,8 @@ fun ItemBottomSheet(
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         sheetState = sheetState,
-        containerColor = Color(0xFFFFF8F8),
         dragHandle = {
             BottomSheetDefaults.DragHandle(
-                color = Color.Black.copy(alpha = 0.4f),
                 width = 32.dp,
                 height = 4.dp,
             )

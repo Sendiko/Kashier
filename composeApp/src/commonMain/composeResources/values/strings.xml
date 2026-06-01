@@ -21,4 +21,7 @@
     <string name="item_name_placeholder">Beri nama barang</string>
     <string name="item_price_label">Harga barang</string>
     <string name="item_price_placeholder">Rp. 000,00</string>
+    <string name="register_user_data">Daftar Data Pengguna</string>
+    <string name="register_user_id_label">ID Pengguna</string>
+    <string name="register_user_id_placeholder">Pilih ID Unik kamu</string>
 </resources>

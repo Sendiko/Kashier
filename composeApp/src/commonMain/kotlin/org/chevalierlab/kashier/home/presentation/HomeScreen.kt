@@ -35,26 +35,11 @@ fun HomeScreen(
     onEvent: (HomeEvent) -> Unit,
     onNavigate: (Any) -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(state.items, state.userName, state.tokenLoaded) {
         if (state.items.isEmpty() && state.userName.isNotEmpty() && state.tokenLoaded) {
             onEvent(HomeEvent.OnLoadData)
-        }
-    }
-
-    LaunchedEffect(state.userName) {
-        delay(500.milliseconds)
-        if (state.userName.isBlank()) {
-            onEvent(HomeEvent.CreateUserName)
-        } else {
-            scope.launch {
-                snackbarHostState.showSnackbar(
-                    message = getString(Res.string.user_created) + state.userName,
-                    withDismissAction = true
-                )
-            }
         }
     }
 
@@ -65,6 +50,14 @@ fun HomeScreen(
                 withDismissAction = true
             )
         }
+    }
+
+    if (state.userSheetOpen) {
+        UserBottomSheet(
+            userName = state.userName,
+            onUserNameChange = { onEvent(HomeEvent.OnUsernameChanged(it)) },
+            onSave = { onEvent(HomeEvent.OnSaveUser) }
+        )
     }
 
     if (state.itemSheetOpen) {

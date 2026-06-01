@@ -19,4 +19,6 @@ sealed interface HomeEvent {
     data class OnItemNameChanged(val name: String) : HomeEvent
     data class OnItemPriceChanged(val price: String) : HomeEvent
     data class OnDeleteItem(val itemId: Int) : HomeEvent
+    data class OnUsernameChanged(val username: String) : HomeEvent
+    data object OnSaveUser: HomeEvent
 }
