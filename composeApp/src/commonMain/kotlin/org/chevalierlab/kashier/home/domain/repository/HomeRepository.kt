@@ -15,8 +15,6 @@ interface HomeRepository {
 
     suspend fun postTransaction(total: Int, userId: String, items: Int): Result<Boolean>
 
-    suspend fun createUser()
-
     fun getUser(): Flow<String>
 
     fun getToken(): Flow<String>

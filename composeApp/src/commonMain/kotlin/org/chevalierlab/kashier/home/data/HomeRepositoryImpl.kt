@@ -57,14 +57,6 @@ class HomeRepositoryImpl(
         }
     }
 
-    override suspend fun createUser() {
-        val allowedChars = ('0'..'9')
-        val randomIdentifier = (1..10).map { allowedChars.random() }.joinToString("")
-        val userIdentifier = "${getDeviceName()}_$randomIdentifier"
-        userLocalDataSource.saveUser(userIdentifier)
-        saveUser(userIdentifier)
-    }
-
     override fun getUser(): Flow<String> {
         return userLocalDataSource.getUser()
     }
@@ -77,6 +69,7 @@ class HomeRepositoryImpl(
         val request = CreateUserRequest(user.replace(" ", "_"))
         val result = userRemoteDataSource.createUser(request)
         userLocalDataSource.setToken(result.getOrNull()?.user?.token ?: "")
+        userLocalDataSource.saveUser(result.getOrNull()?.user?.name ?: "")
         return if (result.isSuccess) {
             Result.success(true)
         } else Result.failure(result.exceptionOrNull() ?: Exception("Unknown error."))
