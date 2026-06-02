@@ -4,7 +4,6 @@ import io.ktor.client.*
 import io.ktor.client.request.*
 import org.chevalierlab.kashier.core.network.BASE_URL
 import org.chevalierlab.kashier.core.network.V1
-import org.chevalierlab.kashier.core.network.V2
 import org.chevalierlab.kashier.home.data.dto.CreateTransactionRequest
 
 class TransactionRemoteDataSourceImpl(
