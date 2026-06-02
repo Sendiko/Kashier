@@ -68,9 +68,9 @@ class HomeRepositoryImpl(
     override suspend fun saveUser(user: String): Result<Boolean> {
         val request = CreateUserRequest(user.replace(" ", "_"))
         val result = userRemoteDataSource.createUser(request)
-        userLocalDataSource.setToken(result.getOrNull()?.user?.token ?: "")
-        userLocalDataSource.saveUser(result.getOrNull()?.user?.name ?: "")
         return if (result.isSuccess) {
+            userLocalDataSource.setToken(result.getOrNull()?.user?.token ?: "")
+            userLocalDataSource.saveUser(result.getOrNull()?.user?.name ?: "")
             Result.success(true)
         } else Result.failure(result.exceptionOrNull() ?: Exception("Unknown error."))
     }
