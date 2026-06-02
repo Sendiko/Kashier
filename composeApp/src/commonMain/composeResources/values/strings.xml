@@ -24,4 +24,5 @@
     <string name="register_user_data">Daftar Data Pengguna</string>
     <string name="register_user_id_label">ID Pengguna</string>
     <string name="register_user_id_placeholder">Pilih ID Unik kamu</string>
+    <string name="your_item_empty">Anda belum punya barang.</string>
 </resources>

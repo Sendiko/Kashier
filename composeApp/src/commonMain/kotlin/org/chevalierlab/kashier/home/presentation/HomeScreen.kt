@@ -45,6 +45,8 @@ import kashier.composeapp.generated.resources.app_name
 import kashier.composeapp.generated.resources.empty_item
 import kashier.composeapp.generated.resources.history_topbar
 import kashier.composeapp.generated.resources.selected_item_label
+import kashier.composeapp.generated.resources.your_item_empty
+import kotlinx.coroutines.delay
 import org.chevalierlab.kashier.core.navigation.HistoryDestination
 import org.chevalierlab.kashier.home.presentation.components.HomeSeparator
 import org.chevalierlab.kashier.home.presentation.components.ItemBottomSheet
@@ -79,6 +81,12 @@ fun HomeScreen(
                 withDismissAction = true
             )
         }
+    }
+
+    LaunchedEffect(state.userName) {
+        delay(1000)
+        if (state.userName.isBlank())
+            onEvent(HomeEvent.ShowUserSheet)
     }
 
     if (state.userSheetOpen) {
@@ -223,6 +231,17 @@ fun HomeScreen(
                         onValueChange = { onEvent(HomeEvent.OnSearchQueryChange(it)) },
                         onSearch = { onEvent(HomeEvent.OnSearchQuerySubmit) }
                     )
+                }
+                if (state.items.isEmpty()) {
+                    item {
+                        Text(
+                            modifier = Modifier.padding(16.dp)
+                                .fillMaxWidth(),
+                            text = stringResource(Res.string.your_item_empty),
+                            style = MaterialTheme.typography.headlineSmall,
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
                 items(state.items) { item ->
                     AnimatedVisibility(

@@ -14,7 +14,7 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
     private val _state = MutableStateFlow(HomeState())
     val state = combine(_state, _userName, _token) { state, userName, token ->
         state.copy(
-            userName = if (state.userName.isEmpty()) userName else state.userName,
+            userName = state.userName.ifEmpty { userName },
             tokenLoaded = token.isNotBlank()
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), HomeState())
@@ -39,7 +39,12 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
             is HomeEvent.OnDeleteItem -> deleteItem(event.itemId)
             is HomeEvent.OnUsernameChanged -> updateUsername(event.username)
             HomeEvent.OnSaveUser -> saveUser()
+            HomeEvent.ShowUserSheet -> showUserSheet()
         }
+    }
+
+    private fun showUserSheet() {
+        _state.update { it.copy(userSheetOpen = true) }
     }
 
     private fun saveUser() {
